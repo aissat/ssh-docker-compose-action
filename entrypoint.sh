@@ -8,9 +8,16 @@ fi
 if [ -z "$DOCKER_ENV_FILE" ]; then
   DOCKER_ENV_FILE=''
 fi
+
 echo "========================================================================"
 echo $DOCKER_ENV
 echo $DOCKER_ENV_FILE
+
+if $PULL; then
+  echo $PULL
+else
+  echo $PULL
+fi
 
 echo -n "$DOCKER_ENV_FILE" | base64 -d > .env
 cat .env
@@ -39,7 +46,7 @@ eval `ssh-agent -s`
 # Construct the remote_command with Docker environment variables
 remote_command="set -e ; $DOCKER_ENV  log() { echo '>> [remote]' \$@ ; } ; cleanup() { log 'Removing workspace...'; rm -rf \"\$HOME/workspace\" ; } ; log 'Creating workspace directory...' ; mkdir -p \"\$HOME/workspace\" ; trap cleanup EXIT ; log 'Unpacking workspace...' ; tar -C \"\$HOME/workspace\" -xjv ;"
 if $PULL; then
-  remote_command="$remote_command log 'Launching docker compose...' ; cd \"\$HOME/workspace\" ; log 'Pull images...' ; docker compose pull ; docker compose -f \"$DOCKER_COMPOSE_FILENAME\" -p \"$DOCKER_COMPOSE_PREFIX\" up -d --remove-orphans --build ;"
+  remote_command="$remote_command log 'Launching docker compose...' ; cd \"\$HOME/workspace\" ; log 'Pull images...' ; docker compose -f \"$DOCKER_COMPOSE_FILENAME\" -p \"$DOCKER_COMPOSE_PREFIX\" pull ; docker compose -f \"$DOCKER_COMPOSE_FILENAME\" -p \"$DOCKER_COMPOSE_PREFIX\" up -d --remove-orphans --build ;"
 else
   remote_command="$remote_command log 'Launching docker compose...' ; cd \"\$HOME/workspace\" ; docker compose -f \"$DOCKER_COMPOSE_FILENAME\" -p \"$DOCKER_COMPOSE_PREFIX\" up -d --remove-orphans --build ;"
 fi
