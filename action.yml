@@ -24,6 +24,9 @@ inputs:
   docker_compose_filename:
     description: Docker compose file to use
     default: docker-compose.yml
+  docker_down:
+    description: Optional Used to specify flags to pass to the docker-compose down command during cleanup ("true" or "false"). 
+    default: 'false'
   pull:
     description: Docker Compose pull images.
     default: 'false'   
@@ -34,6 +37,12 @@ inputs:
     description: Docker Environment variables.
   docker_env_file:
     description: Docker Environment variables.
+  after_deploy:
+    description: Commands to run after deployment.
+    default: 'echo "After deploy"'
+  before_deploy:
+    description: Commands to run before deployment.
+    default: 'echo "Before deploy"'
 runs:
   using: docker
   image: Dockerfile
@@ -48,3 +57,6 @@ runs:
     DOCKER_ENV: ${{ inputs.docker_env }}
     DOCKER_ENV_FILE: ${{ inputs.docker_env_file }}
     PULL: ${{ inputs.pull }}
+    DOCKER_DOWN: ${{ inputs.docker_down }}
+    BEFORE_DEPLOY: ${{ inputs.before_deploy }}
+    AFTER_DEPLOY: ${{ inputs.after_deploy }}
