@@ -81,7 +81,7 @@ fi
 if [ "$DOCKER_DOWN" = true ]; then
     remote_command+=$'\nlog \'Stopping docker compose...\'; docker compose -f "$DOCKER_COMPOSE_FILENAME" -p "$DOCKER_COMPOSE_PREFIX" down;'
 else
-    remote_command+=$'\nlog \'Launching docker compose...\'; docker compose -f "$DOCKER_COMPOSE_FILENAME" -p "$DOCKER_COMPOSE_PREFIX" up -d --remove-orphans --build;'
+    remote_command+=$'\nlog \'Launching docker compose...\'; docker compose -f "$DOCKER_COMPOSE_FILENAME" -p "$DOCKER_COMPOSE_PREFIX" up -d --remove-orphans --force-recreate --build;'
 fi
 
 if [ "$USE_DOCKER_STACK" = true ]; then
